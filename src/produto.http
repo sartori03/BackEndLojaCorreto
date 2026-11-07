@@ -1,0 +1,170 @@
+### listando produtos
+GET http://localhost:8080/produtos
+Accept: application/json
+
+### cadastrando teclado
+POST http://localhost:8080/produtos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc5MjE1ODQ1NSwiZXhwIjoxNzkyMjQ0ODU1fQ.VlDqHgdTdB1OoVtUO4qNoMb8PcmVCfdPjBiommafzUQ
+
+{
+  "nome": "teclado",
+  "preco": 100,
+  "categoria": {
+    "id": 1
+  }
+}
+
+### alterando o produto
+PUT http://localhost:8080/produtos/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc5MTQ2NjU4MiwiZXhwIjoxNzkxNTUyOTgyfQ.EcUENg6MWYQb8baJB1YfT78rGgwFZ-dD7tgqe1Qu3kw
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="produto"; filename="produto.json"
+Content-Type: application/json
+
+{
+  "nome": "teclado Slim",
+  "preco": 100,
+  "categoria": {
+    "id": 1
+  }
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="foto"; filename="teclado_slim.png"
+Content-Type: image/png
+
+< /home/jpescola/Imagens/teclado_slim.png
+--WebAppBoundary--
+
+### excluindo o produto de id 2
+DELETE http://localhost:8080/produtos/2
+
+
+### filtro nome
+GET http://localhost:8080/produtos/filtro-nome?nome=tec
+
+### filtro preco
+GET http://localhost:8080/produtos/filtro-preco?valor=500
+
+### listando produto pelo id
+GET http://localhost:8080/produtos/1
+
+### teste validação de cadastro
+POST http://localhost:8080/produtos
+Content-Type: application/json
+
+{
+  "nome": "",
+  "preco": -100
+}
+
+### cadastrando mouse com foto
+POST http://localhost:8080/produtos
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc5MTQ2MTc2NiwiZXhwIjoxNzkxNTQ4MTY2fQ.oIRVjwgC0Q6m0a1-32UZLTEY8JLqvlYuys_-mqsEueM
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="produto"; filename="produto.json"
+Content-Type: application/json
+
+{
+  "nome": "Mouse",
+  "preco": 10,
+  "categoria": {
+    "id": 1
+  }
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="foto"; filename="mouse.jpg"
+Content-Type: image/jpeg
+
+< /home/jpescola/Downloads/mouse.jpg
+--WebAppBoundary--
+
+### alterando mouse com foto
+PUT http://localhost:8080/produtos/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc5MjAwMjc3OCwiZXhwIjoxNzkyMDg5MTc4fQ.-F48BpxPZlId-uSEnBHJdDIa7RCGTAD0S05Z9xCDWoY
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="produto"; filename="produto.json"
+Content-Type: application/json
+
+{
+  "nome": "Mouse",
+  "preco": 10,
+  "categoria": {
+    "id": 2
+  }
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="foto"; filename="mouse.jpg"
+Content-Type: image/jpeg
+
+< /home/jpescola/Downloads/mouse.jpg
+--WebAppBoundary--
+
+### Cadastrar Produto com Foto e Manual PDF
+POST http://localhost:8080/produtos
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc5MjE1ODU4MCwiZXhwIjoxNzkyMjQ0OTgwfQ.7ax9EnbfxuGZSmF-n6NzX49vOVAbn1mKCgEAo3g8LgE
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="produto"; filename="produto.json"
+Content-Type: application/json
+
+{
+  "nome": "Monitor 4K",
+  "preco": 2200.00,
+  "categoria": {
+    "id": 1
+  }
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="foto"; filename="monitor.jpg"
+Content-Type: image/jpeg
+
+< /home/jpescola/Downloads/foto.jpg
+
+--WebAppBoundary
+Content-Disposition: form-data; name="manual"; filename="manual.pdf"
+Content-Type: application/pdf
+
+< /home/jpescola/Downloads/manual_tv.pdf
+--WebAppBoundary--
+
+### Alterar Produto com Foto e Manual PDF
+PUT http://localhost:8080/produtos/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc5MTQ2NzY5MiwiZXhwIjoxNzkxNTU0MDkyfQ.4wVCNkDOgzitlyDbAEdDrWBCHsAsXfptg1RTjH_c3vM
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="produto"; filename="produto.json"
+Content-Type: application/json
+
+{
+  "nome": "Monitor 4K Novo",
+  "preco": 2500.00,
+  "categoria": {
+    "id": 1
+  }
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="foto"; filename="monitor.jpg"
+Content-Type: image/jpeg
+
+< /home/jpescola/Downloads/foto.jpg
+
+--WebAppBoundary
+Content-Disposition: form-data; name="manual"; filename="manual.pdf"
+Content-Type: application/pdf
+
+< /home/jpescola/Downloads/manual2.pdf
+--WebAppBoundary--
