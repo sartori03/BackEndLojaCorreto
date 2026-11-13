@@ -6,6 +6,8 @@ import com.example.springloja.entities.Produto;
 import com.example.springloja.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,10 +26,16 @@ public class CategoriaService {
     }
 
     public void atualizar(Categoria categoria){
-        repository.save(categoria);
+        Categoria existente = repository.findById(categoria.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+        existente.setNome(categoria.getNome());
+        repository.save(existente);
     }
 
     public void excluir(Long id){
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada");
+        }
         repository.deleteById(id);
     }
 

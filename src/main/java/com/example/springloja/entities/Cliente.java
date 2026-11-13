@@ -20,7 +20,6 @@ public class Cliente {
     @Schema(description = "Nome da Cliente", example = "Eletrônicos")
     private String nome;
 
-    @JsonIgnore
     @Min(value = 0, message = "Minimo de renda é 0")
     private Float renda;
 
