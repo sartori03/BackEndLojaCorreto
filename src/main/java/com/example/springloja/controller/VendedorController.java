@@ -24,6 +24,9 @@ public class VendedorController {
     @Autowired
     private VendedorService service;
 
+    @Autowired
+    private StorageService storageService;
+
     @GetMapping
     @Operation(summary = "Lista todos os vendedores", description = "Retorna uma lista completa dos vendedores")
     public List<VendedorDTO> listar() {
@@ -37,11 +40,17 @@ public class VendedorController {
  {
 
         if (foto != null && !foto.isEmpty()) {
-            StorageService storageService = null;
             String caminho = storageService.salvarArquivo(foto);
             vendedor.setFoto(caminho);
         }
 
+        service.salvar(vendedor);
+        return "Vendedor " + vendedor.getNome() + " criado com sucesso!";
+    }
+
+    // Permite cadastrar vendedor sem foto usando JSON comum.
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String criarJson(@Valid @RequestBody Vendedor vendedor) {
         service.salvar(vendedor);
         return "Vendedor " + vendedor.getNome() + " criado com sucesso!";
     }
@@ -54,6 +63,13 @@ public class VendedorController {
             @RequestPart(value = "foto", required = false) MultipartFile foto) {
 
         service.atualizar(id, vendedor, foto);
+        return "Vendedor atualizado com sucesso!";
+    }
+
+    // Atualizacao sem imagem, sem obrigar FormData no frontend.
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String atualizarJson(@PathVariable Long id, @Valid @RequestBody Vendedor vendedor) {
+        service.atualizar(id, vendedor, null);
         return "Vendedor atualizado com sucesso!";
     }
 

@@ -23,7 +23,6 @@ public class Venda {
     @Schema(description = "Data", example = "01/01/2001")
     private LocalDate data;
 
-    @JsonIgnore
     @Min(value = 0, message = "Minimo da venda é 0")
     private Float venda;
 
@@ -34,7 +33,7 @@ public class Venda {
 
     @NotNull(message = "O vendedor é obrigatório!")
     @Schema(description = "Vendedor", example = "Juliana Banana")
-    @OneToMany
+    @ManyToOne
     private Vendedor vendedor;
 
 

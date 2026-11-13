@@ -53,6 +53,13 @@ public class ProdutoController {
         return "Produto " + produto.getNome() + " criado com sucesso!";
     }
 
+    // Cadastro sem foto/manual aceita application/json.
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String criarJson(@Valid @RequestBody Produto produto) {
+        service.salvar(produto);
+        return "Produto " + produto.getNome() + " criado com sucesso!";
+    }
+
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "bearerAuth")
     public String atualizar(
@@ -62,6 +69,13 @@ public class ProdutoController {
             @RequestPart(value = "manual", required = false) MultipartFile manual) {
 
         service.atualizar(id, produto, foto, manual);
+        return "Produto atualizado com sucesso!";
+    }
+
+    // Atualizacao sem arquivos preserva foto e manual existentes.
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String atualizarJson(@PathVariable Long id, @Valid @RequestBody Produto produto) {
+        service.atualizar(id, produto, null, null);
         return "Produto atualizado com sucesso!";
     }
 

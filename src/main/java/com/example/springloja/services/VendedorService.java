@@ -5,6 +5,10 @@ import com.example.springloja.entities.Vendedor;
 import com.example.springloja.repositories.VendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,24 +34,41 @@ public class VendedorService {
     @Transactional
     public Vendedor atualizar(Long id, Vendedor dadosAtualizados, MultipartFile novaFoto) {
         Vendedor vendedorExistente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vendedor não encontrado com id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vendedor não encontrado: " + id));
 
         // Atualiza os campos normais
         vendedorExistente.setNome(dadosAtualizados.getNome());
 
+        String fotoAnterior = vendedorExistente.getFoto();
         if (novaFoto != null && !novaFoto.isEmpty()) {
-            if (vendedorExistente.getFoto() != null) {
-                storageService.deletarArquivo(vendedorExistente.getFoto());
-            }
-
-            String novoCaminho = storageService.salvarArquivo(novaFoto);
-            vendedorExistente.setFoto(novoCaminho);
+            vendedorExistente.setFoto(storageService.salvarArquivo(novaFoto));
         }
-        return repository.save(vendedorExistente);
+        Vendedor salvo = repository.save(vendedorExistente);
+        if (novaFoto != null && !novaFoto.isEmpty()) {
+            apagarArquivoAposCommit(fotoAnterior);
+        }
+        return salvo;
     }
 
     public void excluir(Long id){
-        repository.deleteById(id);
+        Vendedor vendedor = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Vendedor não encontrado: " + id));
+        repository.delete(vendedor);
+        storageService.deletarArquivo(vendedor.getFoto());
+    }
+
+    private void apagarArquivoAposCommit(String caminho) {
+        if (caminho == null || caminho.isBlank()) return;
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    storageService.deletarArquivo(caminho);
+                }
+            });
+        } else {
+            storageService.deletarArquivo(caminho);
+        }
     }
 
     public List<VendedorDTO> buscarPorNome(String nome) {

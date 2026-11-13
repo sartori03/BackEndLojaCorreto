@@ -6,6 +6,8 @@ import com.example.springloja.entities.Produto;
 import com.example.springloja.repositories.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,15 +26,24 @@ public class VendaService {
     }
 
     public void atualizar(Venda venda){
-        repository.save(venda);
+        Venda existente = repository.findById(venda.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venda não encontrada"));
+        existente.setData(venda.getData());
+        existente.setVenda(venda.getVenda());
+        existente.setCliente(venda.getCliente());
+        existente.setVendedor(venda.getVendedor());
+        repository.save(existente);
     }
 
     public void excluir(Long id){
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Venda não encontrada");
+        }
         repository.deleteById(id);
     }
 
     public List<Venda> buscarPorNome(String nome) {
-        return repository.findByNomeContainingIgnoreCase(nome);
+        return repository.findByClienteNomeContainingIgnoreCase(nome);
     }
 
     public Venda buscarPorId(Long id){

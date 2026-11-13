@@ -6,6 +6,8 @@ import com.example.springloja.entities.Produto;
 import com.example.springloja.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,10 +26,17 @@ public class ClienteService {
     }
 
     public void atualizar(Cliente cliente){
-        repository.save(cliente);
+        Cliente existente = repository.findById(cliente.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+        existente.setNome(cliente.getNome());
+        existente.setRenda(cliente.getRenda());
+        repository.save(existente);
     }
 
     public void excluir(Long id){
+        if (!repository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+        }
         repository.deleteById(id);
     }
 
