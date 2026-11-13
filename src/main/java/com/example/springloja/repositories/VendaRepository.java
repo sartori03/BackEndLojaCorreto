@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Long> {
-    List<Venda> findByNomeContainingIgnoreCase(String nome);
+    List<Venda> findByClienteNomeContainingIgnoreCase(String nome);
 }
 

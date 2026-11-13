@@ -32,7 +32,7 @@ public class VendaService {
     }
 
     public List<Venda> buscarPorNome(String nome) {
-        return repository.findByNomeContainingIgnoreCase(nome);
+        return repository.findByClienteNomeContainingIgnoreCase(nome);
     }
 
     public Venda buscarPorId(Long id){

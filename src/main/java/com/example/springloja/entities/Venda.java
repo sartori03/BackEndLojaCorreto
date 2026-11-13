@@ -34,7 +34,7 @@ public class Venda {
 
     @NotNull(message = "O vendedor é obrigatório!")
     @Schema(description = "Vendedor", example = "Juliana Banana")
-    @OneToMany
+    @ManyToOne
     private Vendedor vendedor;
 
 
