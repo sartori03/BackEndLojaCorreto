@@ -1,6 +1,8 @@
 package com.example.springloja.entities;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -23,7 +25,7 @@ public class Venda {
     @Schema(description = "Data", example = "01/01/2001")
     private LocalDate data;
 
-    @JsonIgnore
+    @JsonProperty("valor")
     @Min(value = 0, message = "Minimo da venda é 0")
     private Float venda;
 
@@ -34,7 +36,7 @@ public class Venda {
 
     @NotNull(message = "O vendedor é obrigatório!")
     @Schema(description = "Vendedor", example = "Juliana Banana")
-    @OneToMany
+    @ManyToOne
     private Vendedor vendedor;
 
 

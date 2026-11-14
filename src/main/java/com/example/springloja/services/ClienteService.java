@@ -1,11 +1,13 @@
 package com.example.springloja.services;
 
-import com.example.springloja.dto.ProdutoDTO;
+import com.example.springloja.dto.ClienteDTO;
 import com.example.springloja.entities.Cliente;
-import com.example.springloja.entities.Produto;
+import com.example.springloja.entities.Cliente;
 import com.example.springloja.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,8 +25,15 @@ public class ClienteService {
         repository.save(Cliente);
     }
 
-    public void atualizar(Cliente cliente){
-        repository.save(cliente);
+    @Transactional
+    public void atualizar(Cliente cliente) {
+        Cliente clienteExistente = repository.findById(cliente.getId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com id: "));
+
+        clienteExistente.setNome(cliente.getNome());
+        clienteExistente.setRenda(cliente.getRenda());
+
+        repository.save(clienteExistente);
     }
 
     public void excluir(Long id){

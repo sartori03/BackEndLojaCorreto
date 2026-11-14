@@ -17,12 +17,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vendedor")
+@RequestMapping("/vendedores")
 @CrossOrigin
 @Tag(name="Vendedor", description = "Gerenciamento vendedores")
 public class VendedorController {
     @Autowired
     private VendedorService service;
+
+    @Autowired
+    private StorageService storageService;
 
     @GetMapping
     @Operation(summary = "Lista todos os vendedores", description = "Retorna uma lista completa dos vendedores")
@@ -37,7 +40,6 @@ public class VendedorController {
  {
 
         if (foto != null && !foto.isEmpty()) {
-            StorageService storageService = null;
             String caminho = storageService.salvarArquivo(foto);
             vendedor.setFoto(caminho);
         }
